@@ -28,7 +28,7 @@ android {
 
         applicationId 'player.phonograph'
         versionCode 2
-        versionName '0.0.1'
+        versionName 'preview_11_14'
         versionNameSuffix ' (' + getGitHash() + ')'
     }
     signingConfigs {
