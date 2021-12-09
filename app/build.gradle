@@ -193,6 +193,7 @@ dependencies {
 
     implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
 
+    implementation 'com.github.577fkj:StatusBarApiExample:v2.0'
 }
 repositories {
     mavenCentral()
