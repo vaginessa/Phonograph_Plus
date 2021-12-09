@@ -250,7 +250,7 @@ object LyricsUtil {
             } ?: stop(App.instance.lyricsService)
         }
 
-        private fun send(lyricsService: StatusbarLyric.API.StatusBarLyric, lyric: String) {
+        private fun send(lyricsService: StatusBarLyric.API.StatusBarLyric, lyric: String) {
             if (!lyricsService.hasEnable() && getInstance(context).broadcastSynchronizedLyrics()) {
                 Log.d("statusbar_lyric", "use fallback: $lyric")
                 if (lyric.isNotEmpty()) {
@@ -267,7 +267,7 @@ object LyricsUtil {
                 }
             }
         }
-        private fun stop(lyricsService: StatusbarLyric.API.StatusBarLyric) {
+        private fun stop(lyricsService: StatusBarLyric.API.StatusBarLyric) {
             if (!lyricsService.hasEnable()) {
                 context.sendBroadcast(
                     Intent().setAction("Lyric_Server").putExtra("Lyric_Type", "app_stop")
