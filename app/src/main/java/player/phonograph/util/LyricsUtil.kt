@@ -5,6 +5,7 @@
 package player.phonograph.util
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -202,17 +203,7 @@ object LyricsUtil {
             fetcher.lyrics = lyrics
         }
         fun replaceSong(song: Song) {
-            fetcher.lyrics = null // clean first
-            fetchLyrics(song)
-                ?.let {
-                    fetcher.lyrics = when (it.getType()) {
-                        AbsLyrics.LRC -> it as LyricsParsedSynchronized
-                        else -> {
-                            stop()
-                            null
-                        }
-                    }
-                }
+            fetcher.lyrics = fetchLyrics(song) as LyricsParsedSynchronized?
         }
 
         override fun handleMessage(msg: Message) {
@@ -250,12 +241,38 @@ object LyricsUtil {
                     // sending only when playing
                     if (MusicPlayerRemote.isPlaying()) {
                         if (!Setting.instance.broadcastSynchronizedLyrics) return // do nothing
-                        App.instance.lyricsService.updateLyric(line)
+//                        App.instance.lyricsService.updateLyric(line)
+                        send(App.instance.lyricsService, line)
                     }
                     // update cache
                     cache = line
                 }
-            } ?: App.instance.lyricsService.stopLyric()
+            } ?: stop(App.instance.lyricsService)
+        }
+
+        private fun send(lyricsService: StatusbarLyric.API.StatusBarLyric, lyric: String) {
+            if (!lyricsService.hasEnable() && getInstance(context).broadcastSynchronizedLyrics()) {
+                Log.d("statusbar_lyric", "use fallback: $lyric")
+                if (lyric.isNotEmpty()) {
+                    context.sendBroadcast(
+                        Intent().setAction("Lyric_Server")
+                            .putExtra("Lyric_Type", "app")
+                            .putExtra("Lyric_Data", lyric)
+                            .putExtra(
+                                "Lyric_PackName", App.PACKAGE_NAME
+                            ) // Actually, PackName is (music) service name, so we have no suffix (.plus.BUILD_TYPE)
+//                            .putExtra("Lyric_Icon", icon)
+//                            .putExtra("Lyric_UseSystemMusicActive", useSystemMusicActive)
+                    )
+                }
+            }
+        }
+        private fun stop(lyricsService: StatusbarLyric.API.StatusBarLyric) {
+            if (!lyricsService.hasEnable()) {
+                context.sendBroadcast(
+                    Intent().setAction("Lyric_Server").putExtra("Lyric_Type", "app_stop")
+                )
+            }
         }
 
         companion object {
