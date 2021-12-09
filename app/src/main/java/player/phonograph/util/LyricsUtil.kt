@@ -63,7 +63,9 @@ object LyricsUtil {
             }
         } catch (e: Exception) {
             val buildType = BuildConfig.BUILD_TYPE
-            if (buildType != "release" || buildType != "preview") { e.printStackTrace() }
+            if (buildType != "release" || buildType != "preview") {
+                e.printStackTrace()
+            }
         }
 
         // from file
@@ -75,7 +77,10 @@ object LyricsUtil {
 
                 // precise pattern
                 val preciseFormat = "%s\\.(lrc|txt)"
-                val precisePattern = Pattern.compile(String.format(preciseFormat, filename), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+                val precisePattern = Pattern.compile(
+                    String.format(preciseFormat, filename),
+                    Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
+                )
 //                val precisePatterns =listOf<Pattern>(
 //                    Pattern.compile(String.format(preciseFormat, filename), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE),
 //                    Pattern.compile(String.format(preciseFormat, songTitle), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
@@ -84,8 +89,14 @@ object LyricsUtil {
                 // vague pattern
                 val vagueFormat = ".*[-;]?%s[-;]?.*\\.(lrc|txt)"
                 val vaguePatterns = listOf<Pattern>(
-                    Pattern.compile(String.format(vagueFormat, filename), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE),
-                    Pattern.compile(String.format(vagueFormat, songTitle), Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE)
+                    Pattern.compile(
+                        String.format(vagueFormat, filename),
+                        Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
+                    ),
+                    Pattern.compile(
+                        String.format(vagueFormat, songTitle),
+                        Pattern.CASE_INSENSITIVE or Pattern.UNICODE_CASE
+                    )
                 )
 
                 val preciseFiles: MutableList<File> = ArrayList(2)
@@ -159,7 +170,8 @@ object LyricsUtil {
             } else {
                 e.printStackTrace()
             }
-        } catch (e: Exception) {}
+        } catch (e: Exception) {
+        }
 
         return if (raw != null) loadLyrics(raw)
         else null
@@ -174,7 +186,9 @@ object LyricsUtil {
             }
         }
 
-        fun replaceLyrics(lyrics: LyricsParsedSynchronized?) { this.lyrics = lyrics }
+        fun replaceLyrics(lyrics: LyricsParsedSynchronized?) {
+            this.lyrics = lyrics
+        }
 
         fun getLine(time: Int): String? {
             val offsetTime = if (time > 100) time - 100 else time
@@ -185,23 +199,41 @@ object LyricsUtil {
     /**
      * broadcast for "MIUI StatusBar Lyrics" Xposed module
      */
-    class LyricsRefresher(looper: Looper, private var context: Context, private var fetcher: LyricsFetcher) : Handler(looper) {
+    class LyricsRefresher(
+        looper: Looper,
+        private var context: Context,
+        private var fetcher: LyricsFetcher
+    ) : Handler(looper) {
 
-        constructor(looper: Looper, context: Context, song: Song) : this(looper, context, LyricsFetcher(song))
-        constructor(looper: Looper, context: Context, lyrics: LyricsParsedSynchronized) : this(looper, context, LyricsFetcher(lyrics))
+        constructor(looper: Looper, context: Context, song: Song) : this(
+            looper,
+            context,
+            LyricsFetcher(song)
+        )
+
+        constructor(looper: Looper, context: Context, lyrics: LyricsParsedSynchronized) : this(
+            looper,
+            context,
+            LyricsFetcher(lyrics)
+        )
 
         fun start() {
             queueNextRefresh(1)
         }
+
         fun stop() {
             removeMessages(CMD_REFRESH_PROGRESS_VIEWS)
             App.instance.lyricsService.stopLyric()
         }
 
-        fun replaceFetcher(fetcher: LyricsFetcher) { this.fetcher = fetcher }
+        fun replaceFetcher(fetcher: LyricsFetcher) {
+            this.fetcher = fetcher
+        }
+
         fun replaceLyrics(lyrics: LyricsParsedSynchronized) {
             fetcher.lyrics = lyrics
         }
+
         fun replaceSong(song: Song) {
             fetcher.lyrics = fetchLyrics(song) as LyricsParsedSynchronized?
         }
@@ -251,8 +283,14 @@ object LyricsUtil {
         }
 
         private fun send(lyricsService: StatusBarLyric.API.StatusBarLyric, lyric: String) {
-            if (!lyricsService.hasEnable() && getInstance(context).broadcastSynchronizedLyrics()) {
-                Log.d("statusbar_lyric", "use fallback: $lyric")
+            if (!Setting.instance.broadcastSynchronizedLyrics
+            ) return // do nothing
+
+            if (lyricsService.hasEnable()) {
+                lyricsService.updateLyric(lyric)
+            } else {
+                // Fall back
+                Log.d("statusbar_lyric", "[Use_Fallback]$lyric")
                 if (lyric.isNotEmpty()) {
                     context.sendBroadcast(
                         Intent().setAction("Lyric_Server")
@@ -267,6 +305,7 @@ object LyricsUtil {
                 }
             }
         }
+
         private fun stop(lyricsService: StatusBarLyric.API.StatusBarLyric) {
             if (!lyricsService.hasEnable()) {
                 context.sendBroadcast(
