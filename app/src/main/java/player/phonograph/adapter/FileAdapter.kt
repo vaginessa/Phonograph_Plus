@@ -7,8 +7,10 @@ package player.phonograph.adapter
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.media.MediaScannerConnection
-import android.text.format.Formatter.formatFileSize
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
@@ -16,12 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView.SectionedAdapter
-import java.io.File
 import kotlinx.coroutines.*
 import player.phonograph.R
 import player.phonograph.adapter.base.MultiSelectAdapter
 import player.phonograph.adapter.base.MultiSelectionCabController
-import player.phonograph.databinding.ItemListBinding
+import player.phonograph.databinding.ItemListMultiTextBinding
 import player.phonograph.glide.SongGlideRequest
 import player.phonograph.mediastore.MediaStoreUtil
 import player.phonograph.misc.UpdateToastMediaScannerCompletionListener
@@ -31,6 +32,7 @@ import player.phonograph.util.BlacklistUtil
 import player.phonograph.util.menu.onMultiSongMenuItemClick
 import player.phonograph.util.menu.onSongMenuItemClick
 import util.mddesign.util.Util
+import java.io.File
 
 class FileAdapter(
     activity: AppCompatActivity,
@@ -48,7 +50,7 @@ class FileAdapter(
     override fun getItem(datasetPosition: Int): FileEntity = dataSet[datasetPosition]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemListBinding.inflate(LayoutInflater.from(context), parent, false))
+        return ViewHolder(ItemListMultiTextBinding.inflate(LayoutInflater.from(context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -67,22 +69,27 @@ class FileAdapter(
 
     var loadCover: Boolean = Setting.instance.showFileImages
 
-    inner class ViewHolder(var binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(var binding: ItemListMultiTextBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             item: FileEntity,
             position: Int
         ) {
             with(binding) {
                 title.text = item.name
-                text.text = when (item) {
-                    is FileEntity.File -> formatFileSize(context, item.size)
-                    is FileEntity.Folder -> context.resources.getQuantityString(
-                        R.plurals.x_songs,
-                        item.songCount,
-                        item.songCount
-                    )
+                when (item) {
+                    is FileEntity.File -> {
+                        text1.text = item.linkedSong.title
+                        text2.text = item.linkedSong.artistName
+                        text3.text = item.linkedSong.albumName
+                        text2.visibility = View.VISIBLE
+                        text3.visibility = View.VISIBLE
+                    }
+                    is FileEntity.Folder -> {
+                        text1.text = item.location.basePath
+                        text2.visibility = View.INVISIBLE
+                        text3.visibility = View.GONE
+                    }
                 }
-
                 shortSeparator.visibility = if (position == dataSet.size - 1) View.GONE else View.VISIBLE
 
                 setImage(image, item)
