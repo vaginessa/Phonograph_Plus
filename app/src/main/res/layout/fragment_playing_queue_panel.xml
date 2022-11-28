@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playing_queue"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/shadow_down" />
+
+    <include
+        android:id="@+id/playing_queue_current_song"
+        layout="@layout/item_list" />
+
+    <TextView
+        android:id="@+id/playing_queue_sub_header"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/up_next"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playing_queue_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:requiresFadingEdge="vertical" />
+
+</LinearLayout>
