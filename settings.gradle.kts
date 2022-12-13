@@ -162,6 +162,9 @@ dependencyResolutionManagement {
                     "com.heinrichreimersoftware:material-intro:2.0.0")
             library("advrecyclerview",
                     "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0")
+            library("modernAndroidPreference",
+                    "de.maxr1998:modernandroidpreferences:2.3.0"
+            )
             library("composeReorderable",
                     "org.burnoutcrew.composereorderable:reorderable:0.9.6")
         }
