@@ -213,6 +213,8 @@ dependencies {
 
     implementation(deps.bundles.materialTools)
 
+    implementation(deps.bundles.splitties.android)
+
     implementation(deps.menuDsl)
     implementation(deps.seekArc)
     implementation(deps.slidingUpPanel)

@@ -88,6 +88,38 @@ dependencyResolutionManagement {
                    )
             )
 
+
+            //
+            // Splitties
+            //
+            val splittiesGroup = "com.louiscad.splitties"
+            val splittiesVersion = "3.0.0"
+            fun declareSplitties(name: String, kmmAndroid: Boolean = true) {
+                library(
+                    "splitties.$name",
+                    splittiesGroup, "splitties-$name${if (kmmAndroid) "-android" else ""}"
+                ).version(splittiesVersion)
+            }
+            fun declareSplittiesAndroid(names: List<String>) {
+                for (name in names) {
+                    declareSplitties(name)
+                }
+            }
+            fun bundleSplittiesAndroid(names: List<String>) {
+                bundle("splitties.android", names.map { "splitties.$it" })
+            }
+
+            val splittiesArtefacts = listOf(
+                "appctx",
+                "snackbar",
+                "toast",
+                "alertdialog-appcompat",
+                "views-dsl-appcompat",
+                "views-dsl-material"
+            )
+            declareSplittiesAndroid(splittiesArtefacts)
+            bundleSplittiesAndroid(splittiesArtefacts)
+
             //
             // popular
             //
