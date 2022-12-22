@@ -13,6 +13,7 @@ enum class SortRef(val serializedName: String) {
     SONG_NAME("song_name"),
     ALBUM_NAME("album_name"),
     ARTIST_NAME("artist_name"),
+    ALBUM_ARTIST_NAME("album_artist_name"),
     DURATION("duration"),
     YEAR("year"),
     ADDED_DATE("added_date"),
@@ -33,6 +34,7 @@ enum class SortRef(val serializedName: String) {
                 "album_name"        -> ALBUM_NAME
                 "artist_name"       -> ARTIST_NAME
                 "duration"          -> DURATION
+                "album_artist_name" -> ALBUM_ARTIST_NAME
                 "year"              -> YEAR
                 "added_date"        -> ADDED_DATE
                 "modified_date"     -> MODIFIED_DATE
