@@ -21,9 +21,10 @@ open class PlaylistSong : Song {
         albumName: String?,
         artistId: Long,
         artistName: String?,
+        albumArtistName: String?,
         playlistId: Long,
         idInPlayList: Long
-    ) : super(id, title, trackNumber, year, duration, data, dateAdded, dateModified, albumId, albumName, artistId, artistName) {
+    ) : super(id, title, trackNumber, year, duration, data, dateAdded, dateModified, albumId, albumName, artistId, artistName, albumArtistName) {
         this.playlistId = playlistId
         this.idInPlayList = idInPlayList
     }
@@ -85,7 +86,8 @@ open class PlaylistSong : Song {
             artistId = -1,
             artistName = "",
             playlistId = -1,
-            idInPlayList = -1
+            idInPlayList = -1,
+            albumArtistName = ""
         )
     }
 }

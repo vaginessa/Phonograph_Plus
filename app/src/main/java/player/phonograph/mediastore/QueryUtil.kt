@@ -4,12 +4,15 @@
 
 package player.phonograph.mediastore
 
+import player.phonograph.settings.Setting
+import androidx.annotation.RequiresApi
 import android.content.Context
 import android.database.Cursor
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.provider.BaseColumns
 import android.provider.MediaStore.Audio
 import android.provider.MediaStore.Audio.AudioColumns
-import player.phonograph.settings.Setting
 
 
 /**
@@ -78,7 +81,11 @@ fun queryAudio(
     }
 }
 
-val BASE_SONG_PROJECTION = arrayOf(
+val BASE_SONG_PROJECTION: Array<String>
+    get() = if (SDK_INT >= Build.VERSION_CODES.R) BASE_SONG_PROJECTION_R else BASE_SONG_PROJECTION_N
+
+
+private val BASE_SONG_PROJECTION_N = arrayOf(
     BaseColumns._ID, // 0
     AudioColumns.TITLE, // 1
     AudioColumns.TRACK, // 2
@@ -91,6 +98,28 @@ val BASE_SONG_PROJECTION = arrayOf(
     AudioColumns.ALBUM, // 9
     AudioColumns.ARTIST_ID, // 10
     AudioColumns.ARTIST, // 11
+)
+
+
+@RequiresApi(Build.VERSION_CODES.R)
+private val BASE_SONG_PROJECTION_R = arrayOf(
+    BaseColumns._ID, // 0
+    AudioColumns.TITLE, // 1
+    AudioColumns.TRACK, // 2
+    AudioColumns.YEAR, // 3
+    AudioColumns.DURATION, // 4
+    AudioColumns.DATA, // 5
+    AudioColumns.DATE_ADDED, // 6
+    AudioColumns.DATE_MODIFIED, // 7
+    AudioColumns.ALBUM_ID, // 8
+    AudioColumns.ALBUM, // 9
+    AudioColumns.ARTIST_ID, // 10
+    AudioColumns.ARTIST, // 11
+    //
+    // Android R
+    //
+    AudioColumns.ALBUM_ARTIST, // 12
+    // AudioColumns.GENRE, // 13
 )
 
 val BASE_FILE_PROJECTION = arrayOf(

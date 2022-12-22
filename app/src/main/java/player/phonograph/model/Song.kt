@@ -1,9 +1,9 @@
 package player.phonograph.model
 
+import androidx.annotation.Keep
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.annotation.Keep
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -33,6 +33,11 @@ open class Song : Parcelable, Displayable {
     val artistId: Long
     @JvmField
     val artistName: String?
+    //
+    // Android R
+    //
+    @JvmField
+    val albumArtistName: String?
 
     constructor(
         id: Long,
@@ -46,7 +51,8 @@ open class Song : Parcelable, Displayable {
         albumId: Long,
         albumName: String?,
         artistId: Long,
-        artistName: String?
+        artistName: String?,
+        albumArtistName: String?
     ) {
         this.id = id
         this.title = title
@@ -60,24 +66,29 @@ open class Song : Parcelable, Displayable {
         this.albumName = albumName
         this.artistId = artistId
         this.artistName = artistName
+        this.albumArtistName = albumArtistName ?: artistName
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val song = o as Song
-        if (id != song.id) return false
-        if (trackNumber != song.trackNumber) return false
-        if (year != song.year) return false
-        if (duration != song.duration) return false
-        if (dateAdded != song.dateAdded) return false
-        if (dateModified != song.dateModified) return false
-        if (albumId != song.albumId) return false
-        if (artistId != song.artistId) return false
-        if (title != song.title) return false
-        if (data != song.data) return false
-        if (if (albumName != null) albumName != song.albumName else song.albumName != null) return false
-        return if (artistName != null) artistName == song.artistName else song.artistName == null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Song) return false
+
+        if (id != other.id) return false
+        if (title != other.title) return false
+        if (trackNumber != other.trackNumber) return false
+        if (year != other.year) return false
+        if (duration != other.duration) return false
+        if (data != other.data) return false
+        if (dateAdded != other.dateAdded) return false
+        if (dateModified != other.dateModified) return false
+        if (albumId != other.albumId) return false
+        if (albumName != other.albumName) return false
+        if (artistId != other.artistId) return false
+        if (artistName != other.artistName) return false
+        if (albumArtistName != other.albumArtistName) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
@@ -97,7 +108,7 @@ open class Song : Parcelable, Displayable {
     }
 
     override fun toString(): String {
-        return "Song{id=$id, title='$title', trackNumber=$trackNumber, year=$year, duration=$duration, data='$data', dateModified=$dateModified, dataAdded=$dateAdded, albumId=$albumId, albumName='$albumName', artistId=$artistId, artistName='$artistName'}"
+        return "Song{id=$id, title='$title', trackNumber=$trackNumber, year=$year, duration=$duration, data='$data', dateModified=$dateModified, dataAdded=$dateAdded, albumId=$albumId, albumName='$albumName', artistId=$artistId, artistName='$artistName', albumArtistName='$albumArtistName'}"
     }
 
     override fun describeContents(): Int = 0
@@ -115,6 +126,7 @@ open class Song : Parcelable, Displayable {
         dest.writeString(albumName)
         dest.writeLong(artistId)
         dest.writeString(artistName)
+        dest.writeString(albumArtistName)
     }
 
     protected constructor(parcel: Parcel) {
@@ -130,6 +142,7 @@ open class Song : Parcelable, Displayable {
         albumName = parcel.readString()
         artistId = parcel.readLong()
         artistName = parcel.readString()
+        albumArtistName = parcel.readString()
     }
 
     override fun getItemID(): Long = id
@@ -152,7 +165,8 @@ open class Song : Parcelable, Displayable {
             albumId = -1,
             albumName = "",
             artistId = -1,
-            artistName = ""
+            artistName = "",
+            albumArtistName = ""
         )
 
         @Keep

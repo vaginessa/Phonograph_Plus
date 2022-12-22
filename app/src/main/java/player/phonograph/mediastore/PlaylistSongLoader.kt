@@ -9,6 +9,8 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import player.phonograph.model.PlaylistSong
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 
 object PlaylistSongLoader {
 
@@ -40,6 +42,7 @@ object PlaylistSongLoader {
             albumName = cursor.getString(9),
             artistId = cursor.getLong(10),
             artistName = cursor.getString(11),
+            albumArtistName = if (SDK_INT >= Build.VERSION_CODES.R) cursor.getString(12) else null,
             playlistId = playlistId,
             idInPlayList = cursor.getLong(12),
         )

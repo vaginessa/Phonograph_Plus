@@ -4,12 +4,13 @@
 
 package player.phonograph.mediastore
 
-import android.annotation.SuppressLint
-import android.database.Cursor
-import android.provider.MediaStore
 import player.phonograph.model.Song
 import player.phonograph.model.file.FileEntity
 import player.phonograph.model.file.Location
+import android.annotation.SuppressLint
+import android.database.Cursor
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 
 
 /**
@@ -54,7 +55,10 @@ fun parseSong(cursor: Cursor): Song {
     val albumName = cursor.getString(9)
     val artistId = cursor.getLong(10)
     val artistName = cursor.getString(11)
-    return Song(id = id,
+    val albumArtist =
+        if (SDK_INT >= Build.VERSION_CODES.R) cursor.getString(12) else null
+    return Song(
+        id = id,
         title = title,
         trackNumber = trackNumber,
         year = year,
@@ -65,7 +69,9 @@ fun parseSong(cursor: Cursor): Song {
         albumId = albumId,
         albumName = albumName,
         artistId = artistId,
-        artistName = artistName)
+        artistName = artistName,
+        albumArtistName = albumArtist
+    )
 }
 
 /**
@@ -89,18 +95,22 @@ fun parseFileEntity(cursor: Cursor, currentLocation: Location): FileEntity {
     return if (songRelativePath.contains('/')) {
         val folderName = songRelativePath.substringBefore('/')
         // folder
-        FileEntity.Folder(location = currentLocation.changeTo("$basePath/$folderName"),
+        FileEntity.Folder(
+            location = currentLocation.changeTo("$basePath/$folderName"),
             name = folderName,
             dateAdded = dateAdded,
-            dateModified = dateModified)
+            dateModified = dateModified
+        )
     } else {
         // file
-        FileEntity.File(location = currentLocation.changeTo("$basePath/$songRelativePath"),
+        FileEntity.File(
+            location = currentLocation.changeTo("$basePath/$songRelativePath"),
             name = displayName,
             id = id,
             size = size,
             dateAdded = dateAdded,
-            dateModified = dateModified)
+            dateModified = dateModified
+        )
     }
 }
 
