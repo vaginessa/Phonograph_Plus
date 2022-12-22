@@ -263,6 +263,7 @@ class ListOptionsPopup private constructor(
             R.id.sort_order_song          -> SortRef.SONG_NAME
             R.id.sort_order_album         -> SortRef.ALBUM_NAME
             R.id.sort_order_artist        -> SortRef.ARTIST_NAME
+            R.id.sort_order_album_artist  -> SortRef.ALBUM_ARTIST_NAME
             R.id.sort_order_year          -> SortRef.YEAR
             R.id.sort_order_date_added    -> SortRef.ADDED_DATE
             R.id.sort_order_date_modified -> SortRef.MODIFIED_DATE
@@ -276,18 +277,19 @@ class ListOptionsPopup private constructor(
 
     private fun findSortOrderButton(ref: SortRef): RadioButton? =
         when (ref) {
-            SortRef.SONG_NAME     -> viewBinding.sortOrderSong
-            SortRef.ALBUM_NAME    -> viewBinding.sortOrderAlbum
-            SortRef.ARTIST_NAME   -> viewBinding.sortOrderArtist
-            SortRef.YEAR          -> viewBinding.sortOrderYear
-            SortRef.ADDED_DATE    -> viewBinding.sortOrderDateAdded
-            SortRef.MODIFIED_DATE -> viewBinding.sortOrderDateModified
-            SortRef.DURATION      -> viewBinding.sortOrderDuration
-            SortRef.DISPLAY_NAME  -> viewBinding.sortOrderNamePlain
-            SortRef.SONG_COUNT    -> viewBinding.sortOrderSongCount
-            SortRef.ALBUM_COUNT   -> viewBinding.sortOrderAlbumCount
-            SortRef.SIZE          -> viewBinding.sortOrderSize
-            else                  -> null
+            SortRef.SONG_NAME         -> viewBinding.sortOrderSong
+            SortRef.ALBUM_NAME        -> viewBinding.sortOrderAlbum
+            SortRef.ARTIST_NAME       -> viewBinding.sortOrderArtist
+            SortRef.ALBUM_ARTIST_NAME -> viewBinding.sortOrderAlbumArtist
+            SortRef.YEAR              -> viewBinding.sortOrderYear
+            SortRef.ADDED_DATE        -> viewBinding.sortOrderDateAdded
+            SortRef.MODIFIED_DATE     -> viewBinding.sortOrderDateModified
+            SortRef.DURATION          -> viewBinding.sortOrderDuration
+            SortRef.DISPLAY_NAME      -> viewBinding.sortOrderNamePlain
+            SortRef.SONG_COUNT        -> viewBinding.sortOrderSongCount
+            SortRef.ALBUM_COUNT       -> viewBinding.sortOrderAlbumCount
+            SortRef.SIZE              -> viewBinding.sortOrderSize
+            else                      -> null
         }
 
     private fun check(radioButton: RadioButton?) {
