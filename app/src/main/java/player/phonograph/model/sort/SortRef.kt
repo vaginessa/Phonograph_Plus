@@ -13,7 +13,7 @@ enum class SortRef(val serializedName: String) {
     SONG_NAME("song_name"),
     ALBUM_NAME("album_name"),
     ARTIST_NAME("artist_name"),
-    DURATION(""),
+    DURATION("duration"),
     YEAR("year"),
     ADDED_DATE("added_date"),
     MODIFIED_DATE("modified_date"),
@@ -28,20 +28,20 @@ enum class SortRef(val serializedName: String) {
         @Throws(IllegalArgumentException::class)
         fun deserialize(serializedName: String): SortRef {
             return when (serializedName) {
-                "id" -> ID
-                "song_name" -> SONG_NAME
-                "album_name" -> ALBUM_NAME
-                "artist_name" -> ARTIST_NAME
-                "year" -> YEAR
-                "added_date" -> ADDED_DATE
-                "modified_date" -> MODIFIED_DATE
-                "duration" -> DURATION
-                "display_name" -> DISPLAY_NAME
-                "song_count" -> SONG_COUNT
-                "album_count" -> ALBUM_COUNT
-                "size" -> SIZE
-                "path" -> PATH
-                else -> ID
+                "id"                -> ID
+                "song_name"         -> SONG_NAME
+                "album_name"        -> ALBUM_NAME
+                "artist_name"       -> ARTIST_NAME
+                "duration"          -> DURATION
+                "year"              -> YEAR
+                "added_date"        -> ADDED_DATE
+                "modified_date"     -> MODIFIED_DATE
+                "display_name"      -> DISPLAY_NAME
+                "song_count"        -> SONG_COUNT
+                "album_count"       -> ALBUM_COUNT
+                "size"              -> SIZE
+                "path"              -> PATH
+                else                -> ID
             }
         }
     }
