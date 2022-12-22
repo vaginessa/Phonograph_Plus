@@ -34,7 +34,7 @@ class Album : Parcelable, Displayable {
     val artistId: Long
         get() = safeGetFirstSong().artistId
     val artistName: String
-        get() = safeGetFirstSong().artistName ?: "UNKNOWN"
+        get() = safeGetFirstSong().albumArtistName ?:safeGetFirstSong().artistName ?: "UNKNOWN"
     val year: Int
         get() = safeGetFirstSong().year
     val dateModified: Long
