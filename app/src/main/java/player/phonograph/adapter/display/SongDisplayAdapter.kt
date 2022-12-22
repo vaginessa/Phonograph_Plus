@@ -55,6 +55,7 @@ open class SongDisplayAdapter(
                 SortRef.SONG_NAME -> MusicUtil.getSectionName(song.title)
                 SortRef.ARTIST_NAME -> MusicUtil.getSectionName(song.artistName)
                 SortRef.ALBUM_NAME -> MusicUtil.getSectionName(song.albumName)
+                SortRef.ALBUM_ARTIST_NAME -> MusicUtil.getSectionName(song.albumArtistName)
                 SortRef.YEAR -> getYearString(song.year)
                 SortRef.DURATION -> getReadableDurationString(song.duration)
                 SortRef.MODIFIED_DATE ->

@@ -26,6 +26,8 @@ import player.phonograph.util.PhonographColorUtil.nightMode
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import android.annotation.SuppressLint
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import android.view.Menu.NONE
 import android.view.MenuItem
@@ -49,7 +51,8 @@ class SongPage : AbsDisplayPage<Song, DisplayAdapter<Song>, GridLayoutManager>()
             if (displayConfig.gridSize > displayConfig.maxGridSizeForList) R.layout.item_grid
             else R.layout.item_list
         Log.d(
-            TAG, "layoutRes: ${if (layoutRes == R.layout.item_grid) "GRID" else if (layoutRes == R.layout.item_list) "LIST" else "UNKNOWN"}"
+            TAG,
+            "layoutRes: ${if (layoutRes == R.layout.item_grid) "GRID" else if (layoutRes == R.layout.item_list) "LIST" else "UNKNOWN"}"
         )
 
         return SongDisplayAdapter(
@@ -95,13 +98,27 @@ class SongPage : AbsDisplayPage<Song, DisplayAdapter<Song>, GridLayoutManager>()
 
         popup.sortRef = currentSortMode.sortRef
         popup.sortRefAvailable =
-            arrayOf(
-                SortRef.SONG_NAME,
-                SortRef.ALBUM_NAME,
-                SortRef.ARTIST_NAME, SortRef.YEAR, SortRef.ADDED_DATE,
-                SortRef.MODIFIED_DATE,
-                SortRef.DURATION,
-            )
+            if (SDK_INT >= Build.VERSION_CODES.R)
+                arrayOf(
+                    SortRef.SONG_NAME,
+                    SortRef.ALBUM_NAME,
+                    SortRef.ARTIST_NAME,
+                    SortRef.ALBUM_ARTIST_NAME,
+                    SortRef.YEAR,
+                    SortRef.ADDED_DATE,
+                    SortRef.MODIFIED_DATE,
+                    SortRef.DURATION,)
+            else
+                arrayOf(
+                    SortRef.SONG_NAME,
+                    SortRef.ALBUM_NAME,
+                    SortRef.ARTIST_NAME,
+                    // SortRef.ALBUM_ARTIST_NAME,
+                    SortRef.YEAR,
+                    SortRef.ADDED_DATE,
+                    SortRef.MODIFIED_DATE,
+                    SortRef.DURATION,
+                )
     }
 
     override fun saveSortOrderImpl(
@@ -126,8 +143,10 @@ class SongPage : AbsDisplayPage<Song, DisplayAdapter<Song>, GridLayoutManager>()
         attach(context, panelToolbar.menu) {
             rootMenu.add(this, NONE, NONE, 1, getString(R.string.action_play)) {
                 icon = context
-                    .getTintedDrawable(R.drawable.ic_play_arrow_white_24dp,
-                                       context.primaryTextColor(context.resources.nightMode))
+                    .getTintedDrawable(
+                        R.drawable.ic_play_arrow_white_24dp,
+                        context.primaryTextColor(context.resources.nightMode)
+                    )
                 showAsActionFlag = MenuItem.SHOW_AS_ACTION_ALWAYS
                 onClick {
                     val allSongs = SongLoader.getAllSongs(context)
@@ -137,8 +156,10 @@ class SongPage : AbsDisplayPage<Song, DisplayAdapter<Song>, GridLayoutManager>()
             }
             rootMenu.add(this, NONE, NONE, 2, getString(R.string.action_shuffle_all)) {
                 icon = context
-                    .getTintedDrawable(R.drawable.ic_shuffle_white_24dp,
-                                       context.primaryTextColor(context.resources.nightMode))
+                    .getTintedDrawable(
+                        R.drawable.ic_shuffle_white_24dp,
+                        context.primaryTextColor(context.resources.nightMode)
+                    )
                 showAsActionFlag = MenuItem.SHOW_AS_ACTION_ALWAYS
                 onClick {
                     val allSongs = SongLoader.getAllSongs(context)
