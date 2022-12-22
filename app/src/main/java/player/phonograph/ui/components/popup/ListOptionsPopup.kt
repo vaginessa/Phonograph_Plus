@@ -118,12 +118,14 @@ class ListOptionsPopup private constructor(
             this.useLegacyListFiles.buttonTintList = widgetColor
             this.showFileImagines.buttonTintList = widgetColor
             // radioButton
-            for (i in 0 until this.groupGridSize.childCount) (this.groupGridSize.getChildAt(i) as RadioButton).buttonTintList =
-                widgetColor
-            for (i in 0 until this.groupSortOrderRef.childCount) (this.groupSortOrderRef.getChildAt(i) as RadioButton).buttonTintList =
-                widgetColor
-            for (i in 0 until this.groupSortOrderMethod.childCount) (this.groupSortOrderMethod.getChildAt(i) as RadioButton).buttonTintList =
-                widgetColor
+
+            for (i in 0 until this.groupGridSize.childCount)
+                (this.groupGridSize.getChildAt(i) as RadioButton).buttonTintList = widgetColor
+            for (i in 0 until this.groupSortOrderRef.childCount)
+                (this.groupSortOrderRef.getChildAt(i) as RadioButton).buttonTintList = widgetColor
+            for (i in 0 until this.groupSortOrderMethod.childCount)
+                (this.groupSortOrderMethod.getChildAt(i) as RadioButton).buttonTintList =
+                    widgetColor
         }
     }
 
@@ -132,7 +134,7 @@ class ListOptionsPopup private constructor(
             when (viewBinding.groupSortOrderMethod.checkedRadioButtonId) {
                 R.id.sort_method_a_z -> false
                 R.id.sort_method_z_a -> true
-                else -> true
+                else                 -> true
             }
         set(value) {
             viewBinding.apply {
@@ -219,7 +221,9 @@ class ListOptionsPopup private constructor(
 
     var colorFooter: Boolean
         get() = viewBinding.actionColoredFooters.isChecked
-        set(value) { viewBinding.actionColoredFooters.isChecked = value }
+        set(value) {
+            viewBinding.actionColoredFooters.isChecked = value
+        }
 
     var colorFooterVisibility: Boolean
         get() = viewBinding.actionColoredFooters.visibility == VISIBLE
@@ -256,34 +260,34 @@ class ListOptionsPopup private constructor(
 
     private fun getSortOrderById(@IdRes id: Int): SortRef =
         when (id) {
-            R.id.sort_order_song -> SortRef.SONG_NAME
-            R.id.sort_order_album -> SortRef.ALBUM_NAME
-            R.id.sort_order_artist -> SortRef.ARTIST_NAME
-            R.id.sort_order_year -> SortRef.YEAR
-            R.id.sort_order_date_added -> SortRef.ADDED_DATE
+            R.id.sort_order_song          -> SortRef.SONG_NAME
+            R.id.sort_order_album         -> SortRef.ALBUM_NAME
+            R.id.sort_order_artist        -> SortRef.ARTIST_NAME
+            R.id.sort_order_year          -> SortRef.YEAR
+            R.id.sort_order_date_added    -> SortRef.ADDED_DATE
             R.id.sort_order_date_modified -> SortRef.MODIFIED_DATE
-            R.id.sort_order_duration -> SortRef.DURATION
-            R.id.sort_order_name_plain -> SortRef.DISPLAY_NAME
-            R.id.sort_order_song_count -> SortRef.SONG_COUNT
-            R.id.sort_order_album_count -> SortRef.ALBUM_COUNT
-            R.id.sort_order_size -> SortRef.SIZE
-            else -> SortRef.ID
+            R.id.sort_order_duration      -> SortRef.DURATION
+            R.id.sort_order_name_plain    -> SortRef.DISPLAY_NAME
+            R.id.sort_order_song_count    -> SortRef.SONG_COUNT
+            R.id.sort_order_album_count   -> SortRef.ALBUM_COUNT
+            R.id.sort_order_size          -> SortRef.SIZE
+            else                          -> SortRef.ID
         }
 
     private fun findSortOrderButton(ref: SortRef): RadioButton? =
         when (ref) {
-            SortRef.SONG_NAME -> viewBinding.sortOrderSong
-            SortRef.ALBUM_NAME -> viewBinding.sortOrderAlbum
-            SortRef.ARTIST_NAME -> viewBinding.sortOrderArtist
-            SortRef.YEAR -> viewBinding.sortOrderYear
-            SortRef.ADDED_DATE -> viewBinding.sortOrderDateAdded
+            SortRef.SONG_NAME     -> viewBinding.sortOrderSong
+            SortRef.ALBUM_NAME    -> viewBinding.sortOrderAlbum
+            SortRef.ARTIST_NAME   -> viewBinding.sortOrderArtist
+            SortRef.YEAR          -> viewBinding.sortOrderYear
+            SortRef.ADDED_DATE    -> viewBinding.sortOrderDateAdded
             SortRef.MODIFIED_DATE -> viewBinding.sortOrderDateModified
-            SortRef.DURATION -> viewBinding.sortOrderDuration
-            SortRef.DISPLAY_NAME -> viewBinding.sortOrderNamePlain
-            SortRef.SONG_COUNT -> viewBinding.sortOrderSongCount
-            SortRef.ALBUM_COUNT -> viewBinding.sortOrderAlbumCount
-            SortRef.SIZE -> viewBinding.sortOrderSize
-            else -> null
+            SortRef.DURATION      -> viewBinding.sortOrderDuration
+            SortRef.DISPLAY_NAME  -> viewBinding.sortOrderNamePlain
+            SortRef.SONG_COUNT    -> viewBinding.sortOrderSongCount
+            SortRef.ALBUM_COUNT   -> viewBinding.sortOrderAlbumCount
+            SortRef.SIZE          -> viewBinding.sortOrderSize
+            else                  -> null
         }
 
     private fun check(radioButton: RadioButton?) {
