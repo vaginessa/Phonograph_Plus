@@ -197,79 +197,79 @@ class Setting(context: Context) {
         const val HOME_TAB_CONFIG = "home_tab_config"
         const val COLORED_NOTIFICATION = "colored_notification"
         const val CLASSIC_NOTIFICATION = "classic_notification"
-        private const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
+        const val COLORED_APP_SHORTCUTS = "colored_app_shortcuts"
         const val ALBUM_ART_ON_LOCKSCREEN = "album_art_on_lockscreen"
         const val BLURRED_ALBUM_ART = "blurred_album_art"
         const val FIXED_TAB_LAYOUT = "fixed_tab_layout"
 
         // Behavior-Retention
-        private const val REMEMBER_LAST_TAB = "remember_last_tab"
-        private const val LAST_PAGE = "last_start_page"
-        private const val LAST_MUSIC_CHOOSER = "last_music_chooser"
+        const val REMEMBER_LAST_TAB = "remember_last_tab"
+        const val LAST_PAGE = "last_start_page"
+        const val LAST_MUSIC_CHOOSER = "last_music_chooser"
         const val NOW_PLAYING_SCREEN_ID = "now_playing_screen_id"
 
         // Behavior-File
         const val IMAGE_SOURCE_CONFIG = "image_source_config"
         const val IGNORE_MEDIA_STORE_ARTWORK = "ignore_media_store_artwork"
-        private const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
+        const val AUTO_DOWNLOAD_IMAGES_POLICY = "auto_download_images_policy"
 
         // Behavior-Playing
         const val SONG_ITEM_CLICK_MODE = "song_item_click_extra_flag"
         const val SONG_ITEM_CLICK_EXTRA_FLAG = "song_item_click_extra_mode"
         const val KEEP_PLAYING_QUEUE_INTACT = "keep_playing_queue_intact"
-        private const val REMEMBER_SHUFFLE = "remember_shuffle"
-        private const val AUDIO_DUCKING = "audio_ducking"
+        const val REMEMBER_SHUFFLE = "remember_shuffle"
+        const val AUDIO_DUCKING = "audio_ducking"
         const val GAPLESS_PLAYBACK = "gapless_playback"
-        private const val ENABLE_LYRICS = "enable_lyrics"
+        const val ENABLE_LYRICS = "enable_lyrics"
         const val BROADCAST_SYNCHRONIZED_LYRICS = "synchronized_lyrics_send"
         const val BROADCAST_CURRENT_PLAYER_STATE = "broadcast_current_player_state"
 
         // Behavior-Lyrics
-        private const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
-        private const val DISPLAY_LYRICS_TIME_AXIS = "display_lyrics_time_axis"
+        const val SYNCHRONIZED_LYRICS_SHOW = "synchronized_lyrics_show"
+        const val DISPLAY_LYRICS_TIME_AXIS = "display_lyrics_time_axis"
 
         // List-Cutoff
-        private const val LAST_ADDED_CUTOFF = "last_added_interval"
+        const val LAST_ADDED_CUTOFF = "last_added_interval"
 
         // Upgrade
-        private const val CHECK_UPGRADE_AT_STARTUP = "check_upgrade_at_startup"
+        const val CHECK_UPGRADE_AT_STARTUP = "check_upgrade_at_startup"
 
         // List-SortMode
-        private const val SONG_SORT_MODE = "song_sort_mode"
-        private const val ALBUM_SORT_MODE = "album_sort_mode"
-        private const val ARTIST_SORT_MODE = "artist_sort_mode"
-        private const val GENRE_SORT_MODE = "genre_sort_mode"
+        const val SONG_SORT_MODE = "song_sort_mode"
+        const val ALBUM_SORT_MODE = "album_sort_mode"
+        const val ARTIST_SORT_MODE = "artist_sort_mode"
+        const val GENRE_SORT_MODE = "genre_sort_mode"
 
-        private const val FILE_SORT_MODE = "file_sort_mode"
+        const val FILE_SORT_MODE = "file_sort_mode"
 
         // List-Appearance
         /*  see also [DisplaySetting] */
-        private const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
-        private const val SHOW_FILE_IMAGINES = "show_file_imagines"
+        const val ALBUM_ARTIST_COLORED_FOOTERS = "album_artist_colored_footers"
+        const val SHOW_FILE_IMAGINES = "show_file_imagines"
 
         // SleepTimer
-        private const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
-        private const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
-        private const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
+        const val LAST_SLEEP_TIMER_VALUE = "last_sleep_timer_value"
+        const val NEXT_SLEEP_TIMER_ELAPSED_REALTIME = "next_sleep_timer_elapsed_real_time"
+        const val SLEEP_TIMER_FINISH_SONG = "sleep_timer_finish_music"
 
         // Misc
-        private const val IGNORE_UPGRADE_DATE = "ignore_upgrade_date"
-        private const val INITIALIZED_BLACKLIST = "initialized_blacklist"
+        const val IGNORE_UPGRADE_DATE = "ignore_upgrade_date"
+        const val INITIALIZED_BLACKLIST = "initialized_blacklist"
         const val PATH_FILTER_EXCLUDE_MODE = "path_filter_exclude_mode"
 
         // compatibility
-        private const val USE_LEGACY_FAVORITE_PLAYLIST_IMPL = "use_legacy_favorite_playlist_impl"
-        private const val USE_LEGACY_LIST_FILES_IMPL = "use_legacy_list_files_impl"
-        private const val PLAYLIST_FILES_OPERATION_BEHAVIOUR = "playlist_files_operation_behaviour"
-        private const val USE_LEGACY_DETAIL_DIALOG = "use_legacy_detail_dialog"
+        const val USE_LEGACY_FAVORITE_PLAYLIST_IMPL = "use_legacy_favorite_playlist_impl"
+        const val USE_LEGACY_LIST_FILES_IMPL = "use_legacy_list_files_impl"
+        const val PLAYLIST_FILES_OPERATION_BEHAVIOUR = "playlist_files_operation_behaviour"
+        const val USE_LEGACY_DETAIL_DIALOG = "use_legacy_detail_dialog"
 
         // Changelog
-        private const val LAST_CHANGELOG_VERSION = "last_changelog_version"
-        private const val INTRO_SHOWN = "intro_shown"
+        const val LAST_CHANGELOG_VERSION = "last_changelog_version"
+        const val INTRO_SHOWN = "intro_shown"
 
         // unused & deprecated
         const val FORCE_SQUARE_ALBUM_COVER = "force_square_album_art"
-        private const val IGNORE_UPGRADE_VERSION_CODE = "ignore_upgrade_version_code"
+        const val IGNORE_UPGRADE_VERSION_CODE = "ignore_upgrade_version_code"
 
         //
         // Singleton
