@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import de.Maxr1998.modernpreferences.PreferenceScreen
 import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
+import de.Maxr1998.modernpreferences.helpers.onSelectionChange
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.singleChoice
@@ -19,8 +20,10 @@ import lib.phonograph.preferencedsl.dialogFragment
 import lib.phonograph.preferencedsl.primaryColorSetting
 import lib.phonograph.preferencedsl.switchColored
 import mt.pref.ThemeColor
+import player.phonograph.App
 import player.phonograph.R
 import player.phonograph.appshortcuts.DynamicShortcutManager
+import player.phonograph.coil.IgnoreMediaStorePreference
 import player.phonograph.preferences.HomeTabConfigDialog
 import player.phonograph.settings.Setting
 import player.phonograph.ui.dialogs.ClickModeSettingDialog
@@ -29,8 +32,12 @@ import player.phonograph.ui.modules.settings.subdialogs.NowPlayingScreenPreferen
 import player.phonograph.util.NavigationUtil
 import player.phonograph.util.preferences.HomeTabConfig
 import player.phonograph.util.preferences.NowPlayingScreenConfig
+import player.phonograph.util.preferences.StyleConfig
 import androidx.fragment.app.FragmentActivity
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.media.audiofx.AudioEffect
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 
@@ -44,6 +51,16 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
     }
     singleChoice(Setting.GENERAL_THEME, Setting.THEME_SELECTIONS) {
         titleRes = R.string.pref_title_general_theme
+        onSelectionChange { newValue ->
+            ThemeColor.editTheme(context).markChanged()
+            if (SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                // Set the new theme so that updateAppShortcuts can pull it
+                context.setTheme(StyleConfig.getThemeResFromPrefValue(newValue as String?))
+                DynamicShortcutManager(context).updateDynamicShortcuts()
+            }
+            context.recreate()
+            true
+        }
     }
     primaryColorSetting("primary_color", context) {
         titleRes = R.string.primary_color
@@ -183,11 +200,15 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
         titleRes = R.string.pref_title_ignore_media_store_artwork
         summaryRes = R.string.pref_summary_ignore_media_store_artwork
         defaultValue = false
+        onCheckedChange {
+            IgnoreMediaStorePreference.refresh()
+            true
+        }
     }
     singleChoice(
         Setting.AUTO_DOWNLOAD_IMAGES_POLICY,
         Setting.AUTO_DOWNLOAD_IMAGES_POLICY_SELECTIONS
-    ) { //todo
+    ) {
         titleRes = R.string.pref_title_auto_download_metadata
     }
     //
@@ -232,6 +253,11 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
         summaryRes = R.string.pref_summary_send_lyrics
         titleRes = R.string.pref_title_send_lyrics
         defaultValue = true
+        onCheckedChange {
+            // clear lyrics displaying on the statusbar now
+            App.instance.lyricsService.stopLyric()
+            true
+        }
     }
     switchColored(Setting.BROADCAST_CURRENT_PLAYER_STATE) {
         summaryRes = R.string.pref_summary_broadcast_current_player_state
@@ -241,6 +267,9 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
     pref("equalizer") {
         persistent = false
         titleRes = R.string.equalizer
+        if (!hasEqualizer(context)) {
+            summary = context.getString(R.string.no_equalizer)
+        }
         onClick {
             NavigationUtil.openEqualizer(context as Activity)
             true //todo
@@ -250,7 +279,7 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
     categoryHeaderColored("pref_header_playlists") {
         titleRes = R.string.pref_header_playlists
     }
-    singleChoice(Setting.LAST_ADDED_CUTOFF, Setting.LAST_ADDED_INTERVAL_SELECTIONS) { //todo
+    singleChoice(Setting.LAST_ADDED_CUTOFF, Setting.LAST_ADDED_INTERVAL_SELECTIONS) {
         titleRes = R.string.pref_title_last_added_interval
     }
     //
@@ -287,6 +316,11 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
         titleRes = R.string.pref_title_playlist_files_operation_behaviour
         summaryRes = R.string.pref_summary_playlist_files_operation_behaviour
     }
+}
+
+private fun hasEqualizer(context: Context): Boolean {
+    val effects = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
+    return context.packageManager.resolveActivity(effects, 0) != null
 }
 
 const val DIALOG_APP_LANGUAGE = "app_language"
