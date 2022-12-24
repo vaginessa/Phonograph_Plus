@@ -4,6 +4,8 @@
 
 package player.phonograph.ui.modules.settings
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import de.Maxr1998.modernpreferences.Preference
 import de.Maxr1998.modernpreferences.PreferencesAdapter
 import lib.phonograph.activity.ToolbarActivity
 import mt.tint.setActivityToolbarColorAuto
@@ -36,6 +38,9 @@ class SettingsActivity : ToolbarActivity() {
     }
 
     private fun setupPreference() {
+        Preference.Config.dialogBuilderFactory = { context ->
+            MaterialAlertDialogBuilder(context)
+        }
         preferencesAdapter = PreferencesAdapter(setupPreferenceScreen(this))
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
