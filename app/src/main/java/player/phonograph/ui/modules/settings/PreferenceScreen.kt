@@ -157,7 +157,10 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
         summaryRes = R.string.pref_summary_ignore_media_store_artwork
         defaultValue = false
     }
-    singleChoice(Setting.AUTO_DOWNLOAD_IMAGES_POLICY, autoDownloadImagesPolicyValues) { //todo
+    singleChoice(
+        Setting.AUTO_DOWNLOAD_IMAGES_POLICY,
+        Setting.AUTO_DOWNLOAD_IMAGES_POLICY_SELECTIONS
+    ) { //todo
         titleRes = R.string.pref_title_auto_download_metadata
     }
     //
@@ -265,12 +268,6 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
 }
 
 // todo
-val autoDownloadImagesPolicyValues: List<SelectionItem>
-    get() = listOf(
-        SelectionItem("always", R.string.always),
-        SelectionItem("only_wifi", R.string.only_on_wifi),
-        SelectionItem("never", R.string.never),
-    )
 val lastAddedIntervalValues: List<SelectionItem>
     get() = listOf(
         SelectionItem("today", R.string.today),

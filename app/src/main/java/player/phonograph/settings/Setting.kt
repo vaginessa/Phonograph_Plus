@@ -283,6 +283,15 @@ class Setting(context: Context) {
                 SelectionItem(StyleConfig.THEME_DARK, R.string.dark_theme_name),
                 SelectionItem(StyleConfig.THEME_BLACK, R.string.black_theme_name),
             )
+        private const val DOWNLOAD_IMAGES_POLICY_ALWAYS = "always"
+        private const val DOWNLOAD_IMAGES_POLICY_ONLY_WIFI = "only_wifi"
+        private const val DOWNLOAD_IMAGES_POLICY_NEVER = "never"
+        val AUTO_DOWNLOAD_IMAGES_POLICY_SELECTIONS: List<SelectionItem>
+            get() = listOf(
+                SelectionItem(DOWNLOAD_IMAGES_POLICY_ALWAYS, R.string.always),
+                SelectionItem(DOWNLOAD_IMAGES_POLICY_ONLY_WIFI, R.string.only_on_wifi),
+                SelectionItem(DOWNLOAD_IMAGES_POLICY_NEVER, R.string.never),
+            )
 
         //
         // Singleton
@@ -301,9 +310,9 @@ class Setting(context: Context) {
         // Util
         //
         fun isAllowedToDownloadMetadata(context: Context): Boolean {
-            return when (Setting.instance.autoDownloadImagesPolicy) {
-                "always" -> true
-                "only_wifi" -> {
+            return when (instance.autoDownloadImagesPolicy) {
+                DOWNLOAD_IMAGES_POLICY_ALWAYS    -> true
+                DOWNLOAD_IMAGES_POLICY_ONLY_WIFI -> {
                     val cm =
                         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -313,8 +322,8 @@ class Setting(context: Context) {
                         cm.getNetworkCapabilities(network) ?: return false // no capabilities?
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                 }
-                "never" -> false
-                else -> false
+                DOWNLOAD_IMAGES_POLICY_NEVER     -> false
+                else                             -> false
             }
         }
 
