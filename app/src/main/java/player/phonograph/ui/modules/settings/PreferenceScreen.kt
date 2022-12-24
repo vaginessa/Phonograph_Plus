@@ -10,9 +10,10 @@ import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.singleChoice
-import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import lib.phonograph.localization.LanguageSettingDialog
+import lib.phonograph.localization.Localization
 import lib.phonograph.preferencedsl.categoryHeaderColored
+import lib.phonograph.preferencedsl.dialogFragment
 import lib.phonograph.preferencedsl.switchColored
 import player.phonograph.R
 import player.phonograph.preferences.HomeTabConfigDialog
@@ -22,6 +23,7 @@ import player.phonograph.ui.dialogs.PathFilterDialog
 import player.phonograph.ui.modules.settings.subdialogs.NowPlayingScreenPreferenceDialog
 import player.phonograph.util.NavigationUtil
 import player.phonograph.util.preferences.HomeTabConfig
+import player.phonograph.util.preferences.NowPlayingScreenConfig
 import androidx.fragment.app.FragmentActivity
 import android.app.Activity
 import android.content.Context
@@ -48,27 +50,21 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     //     summaryRes = R.string.pref_summary_colored_app_shortcuts
     //     titleRes = R.string.pref_title_app_shortcuts
     // }
-    pref(context.getString(R.string.preference_key_app_language)) {
+    dialogFragment(DIALOG_APP_LANGUAGE, { LanguageSettingDialog() }, fm) {
         titleRes = R.string.app_language
-        summary = "TODO" //todo
-        persistent = false
-        onClick {
-            LanguageSettingDialog().show(fm, "LANGUAGE_SETTING_DIALOG")
-            true
+        summary {
+            Localization.currentLocale(context).displayLanguage
         }
+        name = "LANGUAGE_SETTING_DIALOG"
     }
     //
     categoryHeaderColored("pref_header_library") {
         titleRes = R.string.pref_header_library
     }
-    pref(context.getString(R.string.preference_key_home_tab_config)) {
+    dialogFragment(DIALOG_HOME_TAB_CONFIG, { HomeTabConfigDialog() }, fm) {
         titleRes = R.string.library_categories
         summaryRes = R.string.pref_summary_library_categories
-        persistent = false
-        onClick {
-            HomeTabConfigDialog().show(fm, "LANGUAGE_SETTING_DIALOG")
-            true
-        }
+        name = "HOME_TAB_CONFIG_DIALOG"
     } //todo
     pref("reset_home_pages_tab_config") {
         persistent = false
@@ -101,13 +97,16 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_head_path_filter") {
         titleRes = R.string.path_filter
     }
-    pref(context.getString(R.string.preference_key_blacklist)) {
+    dialogFragment(DIALOG_PATH_FILTER, { PathFilterDialog() }, fm) {
         titleRes = R.string.path_filter
-        summary = "TODO" //todo
-        persistent = false
-        onClick {
-            PathFilterDialog().show(fm, "PATH_FILTER_DIALOG")
-            true
+        summary {
+            with(context) {
+                if (Setting.instance.pathFilterExcludeMode) {
+                    "${getString(R.string.path_filter_excluded_mode)} - \n${getString(R.string.pref_summary_path_filter_excluded_mode)}"
+                } else {
+                    "${getString(R.string.path_filter_included_mode)} - \n${getString(R.string.pref_summary_path_filter_included_mode)}"
+                }
+            }
         }
     }
     //
@@ -129,13 +128,10 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_header_now_playing_screen") {
         titleRes = R.string.pref_header_now_playing_screen
     }
-    pref(context.getString(R.string.preference_key_now_playing_screen)) {
+    dialogFragment(DIALOG_NOW_PLAYING_SCREEN, { NowPlayingScreenPreferenceDialog() }, fm) {
         titleRes = R.string.pref_title_now_playing_screen_appearance
-        summary = "TODO" //todo
-        persistent = false
-        onClick {
-            NowPlayingScreenPreferenceDialog().show(fm, "NOW_PLAYING_SCREEN")
-            true
+        summary {
+            context.getString(NowPlayingScreenConfig.nowPlayingScreen.titleRes)
         }
     }
     switchColored(Setting.DISPLAY_LYRICS_TIME_AXIS) {
@@ -182,14 +178,9 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_header_player_behaviour") {
         titleRes = R.string.pref_header_player_behaviour
     }
-    pref(context.getString(R.string.preference_key_click_behavior)) {
-        persistent = false
+    dialogFragment(DIALOG_CLICK_BEHAVIOR, { ClickModeSettingDialog() }, fm){
         titleRes = R.string.pref_title_click_behavior
         summaryRes = R.string.pref_summary_click_behavior
-        onClick {
-            ClickModeSettingDialog().show(fm, "CLICK_MODE_SETTING_DIALOG")
-            true
-        }
     }
     switchColored(Setting.AUDIO_DUCKING) {
         summaryRes = R.string.pref_summary_audio_ducking
@@ -266,3 +257,9 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
         summaryRes = R.string.pref_summary_playlist_files_operation_behaviour
     }
 }
+
+const val DIALOG_APP_LANGUAGE = "app_language"
+const val DIALOG_HOME_TAB_CONFIG = "home_tab_config"
+const val DIALOG_PATH_FILTER = "path_filter"
+const val DIALOG_NOW_PLAYING_SCREEN = "now_playing_screen"
+const val DIALOG_CLICK_BEHAVIOR = "click_behavior"
