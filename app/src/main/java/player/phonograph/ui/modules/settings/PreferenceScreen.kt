@@ -34,7 +34,7 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_header_appearance") {
         titleRes = R.string.pref_header_appearance
     }
-    singleChoice(Setting.GENERAL_THEME, themeValue) {
+    singleChoice(Setting.GENERAL_THEME, Setting.THEME_SELECTIONS) {
         titleRes = R.string.pref_title_general_theme
     }
     // switchColored(Setting.SHOULD_COLOR_NAVIGATION_BAR) {
@@ -265,13 +265,6 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
 }
 
 // todo
-val themeValue: List<SelectionItem>
-    get() = listOf(
-        SelectionItem("auto", R.string.auto_theme_name),
-        SelectionItem("light", R.string.light_theme_name),
-        SelectionItem("dark", R.string.dark_theme_name),
-        SelectionItem("black", R.string.black_theme_name),
-    )
 val autoDownloadImagesPolicyValues: List<SelectionItem>
     get() = listOf(
         SelectionItem("always", R.string.always),

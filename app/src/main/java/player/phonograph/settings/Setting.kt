@@ -4,13 +4,16 @@
 
 package player.phonograph.settings
 
+import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import player.phonograph.App
+import player.phonograph.R
 import player.phonograph.actions.click.mode.SongClickMode.FLAG_MASK_PLAY_QUEUE_IF_EMPTY
 import player.phonograph.actions.click.mode.SongClickMode.SONG_PLAY_NOW
 import player.phonograph.model.sort.FileSortMode
 import player.phonograph.model.sort.SortMode
 import player.phonograph.model.sort.SortRef
 import player.phonograph.util.CalendarUtil
+import player.phonograph.util.preferences.StyleConfig
 import androidx.preference.PreferenceManager
 import android.content.Context
 import android.content.SharedPreferences
@@ -45,7 +48,7 @@ class Setting(context: Context) {
 
     // Theme and Color
 
-    var themeString: String by StringPref(GENERAL_THEME, "auto")
+    var themeString: String by StringPref(GENERAL_THEME, StyleConfig.THEME_AUTO)
 
     // Appearance
     var homeTabConfigJsonString: String by StringPref(HOME_TAB_CONFIG, "")
@@ -191,9 +194,8 @@ class Setting(context: Context) {
     companion object {
         private const val TAG = "Setting"
 
-        const val GENERAL_THEME = "general_theme"
-
         // Appearance
+        const val GENERAL_THEME = "general_theme"
         const val HOME_TAB_CONFIG = "home_tab_config"
         const val COLORED_NOTIFICATION = "colored_notification"
         const val CLASSIC_NOTIFICATION = "classic_notification"
@@ -272,6 +274,17 @@ class Setting(context: Context) {
         const val IGNORE_UPGRADE_VERSION_CODE = "ignore_upgrade_version_code"
 
         //
+        // arrays
+        //
+        val THEME_SELECTIONS: List<SelectionItem>
+            get() = listOf(
+                SelectionItem(StyleConfig.THEME_AUTO, R.string.auto_theme_name),
+                SelectionItem(StyleConfig.THEME_LIGHT, R.string.light_theme_name),
+                SelectionItem(StyleConfig.THEME_DARK, R.string.dark_theme_name),
+                SelectionItem(StyleConfig.THEME_BLACK, R.string.black_theme_name),
+            )
+
+        //
         // Singleton
         //
         private var singleton: Setting? = null
@@ -284,7 +297,9 @@ class Setting(context: Context) {
             return singleton!!
         }
 
-        @JvmStatic
+        //
+        // Util
+        //
         fun isAllowedToDownloadMetadata(context: Context): Boolean {
             return when (Setting.instance.autoDownloadImagesPolicy) {
                 "always" -> true
