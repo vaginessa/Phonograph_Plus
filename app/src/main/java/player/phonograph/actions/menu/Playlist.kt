@@ -139,8 +139,7 @@ fun playlistToolbar(
                     title = getString(R.string.pref_title_last_added_interval)
                     icon = getTintedDrawable(R.drawable.ic_timer_white_24dp, iconColor)
                     onClick {
-                        val prefValue =
-                            resources.getStringArray(R.array.pref_playlists_last_added_interval_values)
+                        val prefValue = Setting.INTERVAL_ARRAY
                         val currentChoice = prefValue.indexOf(Setting.instance.lastAddedCutoffPref)
                         MaterialDialog(context)
                             .listItemsSingleChoice(

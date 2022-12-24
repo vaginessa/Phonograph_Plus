@@ -91,15 +91,15 @@ class Setting(context: Context) {
     val lastAddedCutoff: Long
         get() {
             val interval: Long = when (lastAddedCutoffPref) {
-                "today" -> CalendarUtil.elapsedToday
-                "past_seven_days" -> CalendarUtil.getElapsedDays(7)
-                "past_fourteen_days" -> CalendarUtil.getElapsedDays(14)
-                "past_one_month" -> CalendarUtil.getElapsedMonths(1)
-                "past_three_months" -> CalendarUtil.getElapsedMonths(3)
-                "this_week" -> CalendarUtil.elapsedWeek
-                "this_month" -> CalendarUtil.elapsedMonth
-                "this_year" -> CalendarUtil.elapsedYear
-                else -> CalendarUtil.getElapsedMonths(1)
+                INTERVAL_TODAY              -> CalendarUtil.elapsedToday
+                INTERVAL_PAST_SEVEN_DAYS    -> CalendarUtil.getElapsedDays(7)
+                INTERVAL_PAST_FOURTEEN_DAYS -> CalendarUtil.getElapsedDays(14)
+                INTERVAL_PAST_ONE_MONTH     -> CalendarUtil.getElapsedMonths(1)
+                INTERVAL_PAST_THREE_MONTHS  -> CalendarUtil.getElapsedMonths(3)
+                INTERVAL_THIS_WEEK          -> CalendarUtil.elapsedWeek
+                INTERVAL_THIS_MONTH         -> CalendarUtil.elapsedMonth
+                INTERVAL_THIS_YEAR          -> CalendarUtil.elapsedYear
+                else                        -> CalendarUtil.getElapsedMonths(1)
             }
             return (System.currentTimeMillis() - interval) / 1000
         }
@@ -291,6 +291,31 @@ class Setting(context: Context) {
                 SelectionItem(DOWNLOAD_IMAGES_POLICY_ALWAYS, R.string.always),
                 SelectionItem(DOWNLOAD_IMAGES_POLICY_ONLY_WIFI, R.string.only_on_wifi),
                 SelectionItem(DOWNLOAD_IMAGES_POLICY_NEVER, R.string.never),
+            )
+
+        private const val INTERVAL_TODAY = "today"
+        private const val INTERVAL_PAST_SEVEN_DAYS = "past_seven_days"
+        private const val INTERVAL_PAST_FOURTEEN_DAYS = "past_fourteen_days"
+        private const val INTERVAL_PAST_ONE_MONTH = "past_one_month"
+        private const val INTERVAL_PAST_THREE_MONTHS = "past_three_months"
+        private const val INTERVAL_THIS_WEEK = "this_week"
+        private const val INTERVAL_THIS_MONTH = "this_month"
+        private const val INTERVAL_THIS_YEAR = "this_year"
+        val INTERVAL_ARRAY: Array<String> = arrayOf(
+            INTERVAL_TODAY, INTERVAL_PAST_SEVEN_DAYS, INTERVAL_PAST_FOURTEEN_DAYS,
+            INTERVAL_PAST_ONE_MONTH, INTERVAL_PAST_THREE_MONTHS, INTERVAL_THIS_WEEK,
+            INTERVAL_THIS_MONTH, INTERVAL_THIS_YEAR
+        )
+        val LAST_ADDED_INTERVAL_SELECTIONS: List<SelectionItem>
+            get() = listOf(
+                SelectionItem(INTERVAL_TODAY, R.string.today),
+                SelectionItem(INTERVAL_PAST_SEVEN_DAYS, R.string.past_seven_days),
+                SelectionItem(INTERVAL_PAST_FOURTEEN_DAYS, R.string.past_fourteen_days),
+                SelectionItem(INTERVAL_PAST_ONE_MONTH, R.string.past_one_month),
+                SelectionItem(INTERVAL_PAST_THREE_MONTHS, R.string.past_three_months),
+                SelectionItem(INTERVAL_THIS_WEEK, R.string.this_week),
+                SelectionItem(INTERVAL_THIS_MONTH, R.string.this_month),
+                SelectionItem(INTERVAL_THIS_YEAR, R.string.this_year),
             )
 
         //

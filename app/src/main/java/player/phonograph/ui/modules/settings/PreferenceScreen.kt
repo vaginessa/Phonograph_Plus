@@ -228,7 +228,7 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_header_playlists") {
         titleRes = R.string.pref_header_playlists
     }
-    singleChoice(Setting.LAST_ADDED_CUTOFF, lastAddedIntervalValues) { //todo
+    singleChoice(Setting.LAST_ADDED_CUTOFF, Setting.LAST_ADDED_INTERVAL_SELECTIONS) { //todo
         titleRes = R.string.pref_title_last_added_interval
     }
     //
@@ -268,17 +268,6 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
 }
 
 // todo
-val lastAddedIntervalValues: List<SelectionItem>
-    get() = listOf(
-        SelectionItem("today", R.string.today),
-        SelectionItem("past_seven_days", R.string.past_seven_days),
-        SelectionItem("past_fourteen_days", R.string.past_fourteen_days),
-        SelectionItem("past_one_month", R.string.past_one_month),
-        SelectionItem("past_three_months", R.string.past_three_months),
-        SelectionItem("this_week", R.string.this_week),
-        SelectionItem("this_month", R.string.this_month),
-        SelectionItem("this_year", R.string.this_year),
-    )
 val playlistFilesOperationBehaviourValues: List<SelectionItem>
     get() = listOf(
         SelectionItem("auto", R.string.behaviour_auto),
