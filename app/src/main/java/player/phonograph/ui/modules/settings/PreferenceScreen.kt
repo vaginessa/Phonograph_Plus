@@ -6,6 +6,7 @@ package player.phonograph.ui.modules.settings
 
 import com.afollestad.materialdialogs.MaterialDialog
 import de.Maxr1998.modernpreferences.PreferenceScreen
+import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.screen
@@ -17,7 +18,9 @@ import lib.phonograph.preferencedsl.categoryHeaderColored
 import lib.phonograph.preferencedsl.dialogFragment
 import lib.phonograph.preferencedsl.primaryColorSetting
 import lib.phonograph.preferencedsl.switchColored
+import mt.pref.ThemeColor
 import player.phonograph.R
+import player.phonograph.appshortcuts.DynamicShortcutManager
 import player.phonograph.preferences.HomeTabConfigDialog
 import player.phonograph.settings.Setting
 import player.phonograph.ui.dialogs.ClickModeSettingDialog
@@ -28,6 +31,8 @@ import player.phonograph.util.preferences.HomeTabConfig
 import player.phonograph.util.preferences.NowPlayingScreenConfig
 import androidx.fragment.app.FragmentActivity
 import android.app.Activity
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 
 fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(context) {
     titleRes = R.string.action_settings
@@ -48,17 +53,34 @@ fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(
         titleRes = R.string.accent_color
         summaryRes = R.string.accent_color_desc
     }
-    // switchColored(Setting.SHOULD_COLOR_NAVIGATION_BAR) {
-    //     defaultValue = true
-    //     persistent = false
-    //     summaryRes = R.string.pref_summary_colored_navigation_bar
-    //     titleRes = R.string.pref_title_navigation_bar
-    // }
-    // switchColored(Setting.SHOULD_COLOR_APP_SHORTCUTS) {
-    //     defaultValue = true
-    //     summaryRes = R.string.pref_summary_colored_app_shortcuts
-    //     titleRes = R.string.pref_title_app_shortcuts
-    // }
+    switchColored("colored_navigation_bar") {
+        persistent = false
+        titleRes = R.string.pref_title_navigation_bar
+        summaryRes = R.string.pref_summary_colored_navigation_bar
+        defaultValue = ThemeColor.coloredNavigationBar(context)
+        onCheckedChange { newValue ->
+            ThemeColor.editTheme(context)
+                .coloredNavigationBar(newValue)
+                .commit()
+            context.recreate()
+            true
+        }
+    }
+    if (SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        switchColored("colored_app_shortcuts") {
+            persistent = false
+            titleRes = R.string.pref_title_app_shortcuts
+            summaryRes = R.string.pref_summary_colored_app_shortcuts
+            defaultValue = Setting.instance.coloredAppShortcuts
+            onCheckedChange { newValue ->
+                // Save preference
+                Setting.instance.coloredAppShortcuts = newValue
+                // Update app shortcuts
+                DynamicShortcutManager(context).updateDynamicShortcuts()
+                true
+            }
+        }
+    }
     dialogFragment(DIALOG_APP_LANGUAGE, { LanguageSettingDialog() }, fm) {
         titleRes = R.string.app_language
         summary {
