@@ -68,7 +68,28 @@ class Setting(context: Context) {
     // Behavior-File
     var imageSourceConfigJsonString: String by StringPref(IMAGE_SOURCE_CONFIG, "{}")
     var ignoreMediaStoreArtwork: Boolean by BooleanPref(IGNORE_MEDIA_STORE_ARTWORK, false)
-    var autoDownloadImagesPolicy: String by StringPref(AUTO_DOWNLOAD_IMAGES_POLICY, "never")
+    var autoDownloadImagesPolicy: String by StringPref(
+        AUTO_DOWNLOAD_IMAGES_POLICY,
+        DOWNLOAD_IMAGES_POLICY_NEVER
+    )
+
+    fun isAllowedToDownloadMetadata(context: Context): Boolean {
+        return when (instance.autoDownloadImagesPolicy) {
+            DOWNLOAD_IMAGES_POLICY_ALWAYS    -> true
+            DOWNLOAD_IMAGES_POLICY_ONLY_WIFI -> {
+                val cm =
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+                if (!cm.isActiveNetworkMetered) return false // we pass first metred Wifi and Cellular
+                val network = cm.activeNetwork ?: return false // no active network?
+                val capabilities =
+                    cm.getNetworkCapabilities(network) ?: return false // no capabilities?
+                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            }
+            DOWNLOAD_IMAGES_POLICY_NEVER     -> false
+            else                             -> false
+        }
+    }
 
     // Behavior-Playing
     var songItemClickMode: Int
@@ -340,31 +361,13 @@ class Setting(context: Context) {
             return singleton!!
         }
 
-        //
-        // Util
-        //
-        fun isAllowedToDownloadMetadata(context: Context): Boolean {
-            return when (instance.autoDownloadImagesPolicy) {
-                DOWNLOAD_IMAGES_POLICY_ALWAYS    -> true
-                DOWNLOAD_IMAGES_POLICY_ONLY_WIFI -> {
-                    val cm =
-                        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-                    if (!cm.isActiveNetworkMetered) return false // we pass first metred Wifi and Cellular
-                    val network = cm.activeNetwork ?: return false // no active network?
-                    val capabilities =
-                        cm.getNetworkCapabilities(network) ?: return false // no capabilities?
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                }
-                DOWNLOAD_IMAGES_POLICY_NEVER     -> false
-                else                             -> false
-            }
-        }
     }
 
+    //
     // Delegates
-
-    inner class StringPref(private val keyName: String, private val defaultValue: String) : ReadWriteProperty<Any?, String> {
+    //
+    inner class StringPref(private val keyName: String, private val defaultValue: String) :
+            ReadWriteProperty<Any?, String> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): String =
             mPreferences.getString(keyName, defaultValue) ?: defaultValue
 
@@ -373,7 +376,8 @@ class Setting(context: Context) {
         }
     }
 
-    inner class BooleanPref(private val keyName: String, private val defaultValue: Boolean) : ReadWriteProperty<Any?, Boolean> {
+    inner class BooleanPref(private val keyName: String, private val defaultValue: Boolean) :
+            ReadWriteProperty<Any?, Boolean> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean =
             mPreferences.getBoolean(keyName, defaultValue)
 
@@ -382,7 +386,8 @@ class Setting(context: Context) {
         }
     }
 
-    inner class IntPref(private val keyName: String, private val defaultValue: Int) : ReadWriteProperty<Any?, Int> {
+    inner class IntPref(private val keyName: String, private val defaultValue: Int) :
+            ReadWriteProperty<Any?, Int> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Int =
             mPreferences.getInt(keyName, defaultValue)
 
@@ -391,7 +396,8 @@ class Setting(context: Context) {
         }
     }
 
-    inner class LongPref(private val keyName: String, private val defaultValue: Long) : ReadWriteProperty<Any?, Long> {
+    inner class LongPref(private val keyName: String, private val defaultValue: Long) :
+            ReadWriteProperty<Any?, Long> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Long =
             mPreferences.getLong(keyName, defaultValue)
 
