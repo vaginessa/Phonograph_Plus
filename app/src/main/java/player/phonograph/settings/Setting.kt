@@ -317,6 +317,15 @@ class Setting(context: Context) {
                 SelectionItem(INTERVAL_THIS_MONTH, R.string.this_month),
                 SelectionItem(INTERVAL_THIS_YEAR, R.string.this_year),
             )
+        const val PLAYLIST_OPS_BEHAVIOUR_AUTO = "auto"
+        const val PLAYLIST_OPS_BEHAVIOUR_FORCE_SAF = "force_saf"
+        const val PLAYLIST_OPS_BEHAVIOUR_FORCE_LEGACY = "force_legacy"
+        val PLAYLIST_FILES_OPERATION_BEHAVIOUR_SELECTIONS: List<SelectionItem>
+            get() = listOf(
+                SelectionItem(PLAYLIST_OPS_BEHAVIOUR_AUTO, R.string.behaviour_auto),
+                SelectionItem(PLAYLIST_OPS_BEHAVIOUR_FORCE_SAF, R.string.behaviour_force_saf),
+                SelectionItem(PLAYLIST_OPS_BEHAVIOUR_FORCE_LEGACY, R.string.behaviour_force_legacy),
+            )
 
         //
         // Singleton
@@ -351,11 +360,6 @@ class Setting(context: Context) {
                 else                             -> false
             }
         }
-
-        const val PLAYLIST_OPS_BEHAVIOUR_AUTO = "auto"
-        const val PLAYLIST_OPS_BEHAVIOUR_FORCE_SAF = "force_saf"
-        const val PLAYLIST_OPS_BEHAVIOUR_FORCE_LEGACY = "force_legacy"
-
     }
 
     // Delegates

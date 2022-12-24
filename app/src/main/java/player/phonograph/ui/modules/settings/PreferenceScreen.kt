@@ -260,17 +260,9 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     }
     singleChoice(
         Setting.PLAYLIST_FILES_OPERATION_BEHAVIOUR,
-        playlistFilesOperationBehaviourValues
+        Setting.PLAYLIST_FILES_OPERATION_BEHAVIOUR_SELECTIONS
     ) {
         titleRes = R.string.pref_title_playlist_files_operation_behaviour
         summaryRes = R.string.pref_summary_playlist_files_operation_behaviour
     }
 }
-
-// todo
-val playlistFilesOperationBehaviourValues: List<SelectionItem>
-    get() = listOf(
-        SelectionItem("auto", R.string.behaviour_auto),
-        SelectionItem("force_saf", R.string.behaviour_force_saf),
-        SelectionItem("force_legacy", R.string.behaviour_force_legacy),
-    )
