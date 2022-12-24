@@ -12,8 +12,10 @@ import de.Maxr1998.modernpreferences.helpers.screen
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import lib.phonograph.localization.LanguageSettingDialog
 import lib.phonograph.localization.Localization
+import lib.phonograph.preferencedsl.accentColorSetting
 import lib.phonograph.preferencedsl.categoryHeaderColored
 import lib.phonograph.preferencedsl.dialogFragment
+import lib.phonograph.preferencedsl.primaryColorSetting
 import lib.phonograph.preferencedsl.switchColored
 import player.phonograph.R
 import player.phonograph.preferences.HomeTabConfigDialog
@@ -26,18 +28,25 @@ import player.phonograph.util.preferences.HomeTabConfig
 import player.phonograph.util.preferences.NowPlayingScreenConfig
 import androidx.fragment.app.FragmentActivity
 import android.app.Activity
-import android.content.Context
 
-fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) {
+fun setupPreferenceScreen(context: FragmentActivity): PreferenceScreen = screen(context) {
     titleRes = R.string.action_settings
     collapseIcon = true
-    val fm = (context as FragmentActivity).supportFragmentManager
+    val fm = context.supportFragmentManager
     //
     categoryHeaderColored("pref_header_appearance") {
         titleRes = R.string.pref_header_appearance
     }
     singleChoice(Setting.GENERAL_THEME, Setting.THEME_SELECTIONS) {
         titleRes = R.string.pref_title_general_theme
+    }
+    primaryColorSetting("primary_color", context) {
+        titleRes = R.string.primary_color
+        summaryRes = R.string.primary_color_desc
+    }
+    accentColorSetting("accent_color", context) {
+        titleRes = R.string.accent_color
+        summaryRes = R.string.accent_color_desc
     }
     // switchColored(Setting.SHOULD_COLOR_NAVIGATION_BAR) {
     //     defaultValue = true
@@ -178,7 +187,7 @@ fun setupPreferenceScreen(context: Context): PreferenceScreen = screen(context) 
     categoryHeaderColored("pref_header_player_behaviour") {
         titleRes = R.string.pref_header_player_behaviour
     }
-    dialogFragment(DIALOG_CLICK_BEHAVIOR, { ClickModeSettingDialog() }, fm){
+    dialogFragment(DIALOG_CLICK_BEHAVIOR, { ClickModeSettingDialog() }, fm) {
         titleRes = R.string.pref_title_click_behavior
         summaryRes = R.string.pref_summary_click_behavior
     }
