@@ -8,18 +8,16 @@ import player.phonograph.R
 import player.phonograph.dialogs.AddToPlaylistDialog
 import player.phonograph.dialogs.SongDetailDialog
 import player.phonograph.dialogs.SongShareDialog
-import player.phonograph.interfaces.PaletteColorHolder
 import player.phonograph.model.Song
 import player.phonograph.service.MusicPlayerRemote
 import player.phonograph.service.queue.ShuffleMode
 import player.phonograph.settings.Setting
 import player.phonograph.ui.compose.tag.DetailActivity
+import player.phonograph.ui.compose.tag.TagEditorActivity
 import player.phonograph.ui.dialogs.DeleteSongsDialog
 import player.phonograph.util.NavigationUtil
 import player.phonograph.util.PathFilterUtil
 import player.phonograph.util.RingtoneManager
-import util.phonograph.tageditor.AbsTagEditorActivity
-import util.phonograph.tageditor.SongTagEditorActivity
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentActivity
 import android.content.Context
@@ -117,12 +115,7 @@ fun Song.actionAddToBlacklist(context: Context): Boolean {
 }
 
 fun Song.actionTagEditor(context: Context): Boolean {
-    context.startActivity(Intent(context, SongTagEditorActivity::class.java).apply {
-        putExtra(AbsTagEditorActivity.EXTRA_ID, id)
-        (context as? PaletteColorHolder)?.let {
-            putExtra(AbsTagEditorActivity.EXTRA_PALETTE, it.paletteColor)
-        }
-    })
+    TagEditorActivity.launch(context, id)
     return true
 }
 
